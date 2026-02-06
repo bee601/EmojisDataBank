@@ -3,250 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Emoji DB - Cyber Edition</title>
+    <title>Emoji DB - Modern Blue</title>
     <style>
         :root {
-            --bg-dark: #0b0e14;
-            --bg-card: #151921;
-            --accent-blue: #00a2ff;
-            --text-main: #e1e1e1;
-            --text-muted: #8b949e;
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --accent: #58a6ff;
+            --text: #c9d1d9;
             --border: #30363d;
-            --hover-bg: #1f242d;
+            --hover-shadow: rgba(88, 166, 255, 0.2);
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        header {
-            width: 100%;
-            padding: 40px 20px;
+        .header {
             text-align: center;
-            background: linear-gradient(180deg, #161b22 0%, var(--bg-dark) 100%);
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            color: var(--accent-blue);
-            text-shadow: 0 0 20px rgba(0, 162, 255, 0.3);
-        }
+        h1 { color: var(--accent); margin-bottom: 5px; }
 
-        .search-container {
-            position: sticky;
-            top: 20px;
-            z-index: 100;
-            width: 90%;
-            max-width: 700px;
-            margin-top: -25px;
-        }
-
-        #search-bar {
+        #search {
             width: 100%;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            border: 2px solid var(--border);
-            background: var(--bg-card);
+            max-width: 800px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
             color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-size: 16px;
+            margin-bottom: 40px;
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        #search-bar:focus {
-            border-color: var(--accent-blue);
-        }
+        #search:focus { border-color: var(--accent); }
 
-        main {
-            width: 95%;
-            max-width: 1200px;
-            padding: 40px 0;
-        }
+        .container { width: 100%; max-width: 1200px; }
 
-        .category-title {
+        .category-name {
             font-size: 1.2rem;
-            color: var(--text-muted);
-            margin: 30px 0 15px 10px;
+            margin: 25px 0 15px;
+            padding-left: 10px;
+            border-left: 3px solid var(--accent);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            border-left: 4px solid var(--accent-blue);
-            padding-left: 15px;
+            letter-spacing: 1px;
         }
 
+        /* Das Grid für breite Items */
         .emoji-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 12px;
+            margin-bottom: 30px;
         }
 
-        .emoji-card {
-            background: var(--bg-card);
+        .item {
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px 10px;
+            border-radius: 6px;
+            padding: 15px 10px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: 0.2s;
+            font-size: 1.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        .emoji-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-blue);
-            background: var(--hover-bg);
-            box-shadow: 0 0 15px rgba(0, 162, 255, 0.2);
+        .item:hover {
+            border-color: var(--accent);
+            background: #1c2128;
+            box-shadow: 0 0 10px var(--hover-shadow);
+            transform: translateY(-2px);
         }
 
-        .emoji-char {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .emoji-name {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-
-        /* Toast Popup */
         #toast {
             position: fixed;
-            bottom: 30px;
-            background: var(--accent-blue);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
+            bottom: 20px;
+            background: var(--accent);
+            color: #000;
             font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
             display: none;
-            animation: fadeIn 0.3s;
             z-index: 1000;
         }
-
-        @keyframes fadeIn { from { opacity: 0; bottom: 10px; } to { opacity: 1; bottom: 30px; } }
     </style>
 </head>
 <body>
 
-<header>
+<div class="header">
     <h1>EMOJI DB</h1>
-    <p style="color: var(--text-muted)">Klicke auf <b>each</b> Item zum Kopieren</p>
-</header>
-
-<div class="search-container">
-    <input type="text" id="search-bar" placeholder="Suche Emojis, Linien oder Symbole...">
+    <p>Click <b>each</b> item to copy</p>
 </div>
 
-<main id="content"></main>
+<input type="text" id="search" placeholder="Suche nach Emojis oder Symbolen...">
 
-<div id="toast">KOPIERT! 🚀</div>
+<div class="container" id="db-content"></div>
+
+<div id="toast">Copied!</div>
 
 <script>
-    const content = document.getElementById('content');
-    const searchBar = document.getElementById('search-bar');
-    const toast = document.getElementById('toast');
-
-    // Deine speziellen Daten
-    const customData = {
-        "Linien & Trenner": ["│", "┃", "┆", "┇", "┊", "┋", "┈", "┉", "┄", "┅", "─", "───", "━", "╭", "──┈➤", "╰┈➤", "┌", "┐", "└", "┘", "┼"],
-        "Sterne & Deko": ["✦", "✧", "✩", "✪", "✫", "✬", "✭", "✮", "✯", "✰", "✶", "✷", "✸", "✹", "★", "☆", "⋆", "✵", "✧・✦・✧"],
-        "Klammern": ["「 」", "『 』", "⌞ ⌝", "❮ ❯", "❰ ❱", "【 】", "꧁ ༺ ✧ ༻ ⎠ ꧂"],
-        "Discord Style": ["✦ 𝐍𝐚𝐦𝐞 ✦", "┃・𝙲𝚑𝚊𝚝・┃", "╭─➤", "╰─➤", "‧₊˚✧ 𝙼𝚢 𝚁𝚘𝚕𝚎 ✧˚₊‧", "「 ✦ OWNER ✦ 」", "━━━⋆⋅☆⋅⋆━━━"],
-        "Mathe & Tech": ["∞", "≠", "≤", "≥", "±", "∑", "√", "∆", "♦", "⊹", "⊗", "⊕", "█", "▀", "▄", "▆"]
+    const db = {
+        "Linien, Rahmen & Trennzeichen": ['│', '┃', '┆', '┇', '┊', '┋', '┈', '┉', '┄', '┅', '─', '───', '───────', '━', '━━', '╭', '──┈➤', '╰┈➤', '╭╴', '╴╮', '╰', '╯', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼', '〢', '︱', '・', 'ㆍ', '‧', '˖', '·', '●', '■', '▪', '▫', '▬'],
+        "Sterne & Deko": ['✦', '✧', '✩', '✪', '✫', '✬', '✭', '✮', '✯', '✰', '✶', '✷', '✸', '✹', '★', '☆', '⋆', '✵', '✳', '✲', '✦✧', '✪✫', '✯✰', '∘₊✧──────✧₊∘', '‧₊˚✧[Text]✧˚₊‧', '✧・✦・✧', '⋆༺✦༻⋆'],
+        "Klammern & Text‑Deko": ['「', '」', '『', '』', '⌞', '⌝', '❮', '❯', '❰', '❱', '【', '】', '「 ✦ ✦ 」', '「 ✦ OWNER ✦ 」', '「 ✦ Moderator ✦ 」', '꧁ ⎝ ༺ ✧ ༻ ⎠ ꧂'],
+        "Herzen & Symbole": ['❤️', '💛', '💙', '💜', '🖤', '🤍', '🤎', '♡', '♥︎', '💗', '💓', '💖', '💝', '⚜️', '♕', '♛', '👑'],
+        "Layout Emojis": ['⭐', '⭐️', '✨', '⚔️', '⚡️', '⛔', '❗', '❓', '⁉️', '✔️', '❌', '➤', '➜', '➠', '➢', '❯', '▶', '▶️', '◀', '◀️', '◆', '◇', '⬆', '⬇', '⬅', '➡', '⚙️', '♟️', '🎵', '♪', '♫', '🛠️', '🛡️'],
+        "Tech & Mathe": ['∞', '≠', '≤', '≥', '±', '∑', '√', '∆', '♦', '⊹', '⊗', '⊕', '×', '÷', '≈', '∴', '∵', '†', '‡', '¶', '§', '©', '®', '™', '█', '▀', '▄', '▆', '▇', '▉', '▊'],
+        "Gesichter": ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '🥲', '☺️', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🥸', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '😳', '🥵', '🥶', '😶‍🌫️', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🫣', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🫠', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤯', '🥴', '😷', '🤒', '🤕', '🤑', '🤧', '😈', '👿'],
+        "Gesten": ['👋', '🤚', '🖐', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✍️', '💪', '🦾', '🦿', '🦵', '🦶'],
+        "Discord Layouts": ['✦ 𝐍𝐚𝐦𝐞 ✦', '┃・𝙲𝚑𝚊𝚝・┃', '╭─➤ 𝚃𝚘𝚙 𝙻𝚎𝚟𝚎𝚕', '╰─➤ 𝚂𝚞𝚋 𝙻𝚒𝚗𝚎', '‧₊˚✧ 𝙼𝚢 𝚁𝚘𝚕𝚎 ✧˚₊‧', '「 ✦ 𝐎𝐖𝐍𝐄𝐑 ✦ 」', '━━━⋆⋅☆⋅⋆━━━', '✧・✦・✧ 𝐌𝐎𝐃・✦・✧', '┃・⚔️・┃・⚡️・┃', '✔️✔️✔️']
     };
 
-    let allEmojis = [];
+    const contentDiv = document.getElementById('db-content');
+    const toast = document.getElementById('toast');
 
-    async function init() {
-        // 1. Eigene Daten laden
-        renderCustomData(customData);
+    function render(filter = "") {
+        contentDiv.innerHTML = "";
+        for (const cat in db) {
+            const filteredItems = db[cat].filter(item => item.toLowerCase().includes(filter.toLowerCase()));
+            
+            if (filteredItems.length > 0) {
+                const section = document.createElement('div');
+                section.innerHTML = `<div class="category-name">${cat}</div>`;
+                const grid = document.createElement('div');
+                grid.className = 'emoji-grid';
 
-        // 2. Globale Emoji API laden (ähnlich wie emojidb.org)
-        try {
-            const res = await fetch('https://unicode-emoji-json.pages.dev/data-by-group.json');
-            const data = await res.json();
-            allEmojis = data;
-            renderGlobalEmojis(data);
-        } catch (e) { console.error("API Error", e); }
-    }
+                filteredItems.forEach(emoji => {
+                    const div = document.createElement('div');
+                    div.className = 'item';
+                    div.innerText = emoji;
+                    div.onclick = () => copy(emoji);
+                    grid.appendChild(div);
+                });
 
-    function renderCustomData(data) {
-        for (const [cat, list] of Object.entries(data)) {
-            const section = createSection(cat);
-            const grid = section.querySelector('.emoji-grid');
-            list.forEach(item => grid.appendChild(createCard(item, cat)));
-            content.appendChild(section);
+                section.appendChild(grid);
+                contentDiv.appendChild(section);
+            }
         }
     }
 
-    function renderGlobalEmojis(data) {
-        for (const [cat, list] of Object.entries(data)) {
-            const section = createSection(cat);
-            const grid = section.querySelector('.emoji-grid');
-            list.forEach(item => grid.appendChild(createCard(item.emoji, item.name)));
-            content.appendChild(section);
-        }
-    }
-
-    function createSection(title) {
-        const div = document.createElement('div');
-        div.innerHTML = `<div class="category-title">${title}</div><div class="emoji-grid"></div>`;
-        return div;
-    }
-
-    function createCard(char, name) {
-        const card = document.createElement('div');
-        card.className = 'emoji-card';
-        card.innerHTML = `<div class="emoji-char">${char}</div><div class="emoji-name">${name}</div>`;
-        card.onclick = () => {
-            navigator.clipboard.writeText(char);
-            showToast();
-        };
-        return card;
-    }
-
-    function showToast() {
+    function copy(text) {
+        navigator.clipboard.writeText(text);
         toast.style.display = 'block';
         setTimeout(() => toast.style.display = 'none', 1500);
     }
 
-    // Suche
-    searchBar.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        content.innerHTML = '';
-        
-        // Suche in eigenen Daten
-        const filteredCustom = {};
-        for(let cat in customData) {
-            const match = customData[cat].filter(i => i.toLowerCase().includes(term));
-            if(match.length > 0) filteredCustom[cat] = match;
-        }
-        renderCustomData(filteredCustom);
+    document.getElementById('search').addEventListener('input', (e) => render(e.target.value));
 
-        // Suche in globalen Emojis
-        const filteredGlobal = {};
-        for(let cat in allEmojis) {
-            const match = allEmojis[cat].filter(i => i.name.toLowerCase().includes(term));
-            if(match.length > 0) filteredGlobal[cat] = match;
-        }
-        renderGlobalEmojis(filteredGlobal);
-    });
-
-    init();
+    render();
 </script>
+
 </body>
 </html>
