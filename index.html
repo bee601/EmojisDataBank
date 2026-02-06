@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji DB - Modern Blue</title>
+    <title>Ultimate Mega Emoji & Unicode Pack</title>
     <style>
         :root {
-            --bg: #0d1117;
-            --card-bg: #161b22;
-            --accent: #58a6ff;
-            --text: #c9d1d9;
+            --bg: #0b0e14;
+            --card-bg: #151921;
+            --accent: #00a2ff;
+            --text-main: #e1e1e1;
+            --text-muted: #8b949e;
             --border: #30363d;
-            --hover-shadow: rgba(88, 166, 255, 0.2);
+            --hover-bg: #1f242d;
         }
 
         body {
             background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -25,146 +26,191 @@
             align-items: center;
         }
 
-        .header {
+        header {
+            width: 100%;
+            padding: 40px 0;
             text-align: center;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 30px;
         }
 
-        h1 { color: var(--accent); margin-bottom: 5px; }
+        h1 { color: var(--accent); font-size: 2.5rem; margin: 0; letter-spacing: 2px; }
 
-        #search {
+        .search-container {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            width: 90%;
+            max-width: 850px;
+            margin-bottom: 40px;
+        }
+
+        #search-bar {
             width: 100%;
-            max-width: 800px;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: 2px solid var(--border);
             background: var(--card-bg);
             color: white;
-            font-size: 16px;
-            margin-bottom: 40px;
             outline: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
         }
 
-        #search:focus { border-color: var(--accent); }
+        #search-bar:focus { border-color: var(--accent); }
 
-        .container { width: 100%; max-width: 1200px; }
+        .container { width: 100%; max-width: 1300px; }
 
-        .category-name {
-            font-size: 1.2rem;
-            margin: 25px 0 15px;
-            padding-left: 10px;
-            border-left: 3px solid var(--accent);
+        .category-title {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin: 40px 0 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            border-left: 5px solid var(--accent);
+            padding-left: 15px;
         }
 
-        /* Das Grid für breite Items */
         .emoji-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 12px;
-            margin-bottom: 30px;
+            gap: 15px;
         }
 
-        .item {
+        .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 15px 10px;
+            border-radius: 12px;
+            padding: 20px 10px;
             text-align: center;
             cursor: pointer;
-            transition: 0.2s;
-            font-size: 1.2rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            transition: all 0.2s;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 80px;
         }
 
-        .item:hover {
+        .card:hover {
             border-color: var(--accent);
-            background: #1c2128;
-            box-shadow: 0 0 10px var(--hover-shadow);
-            transform: translateY(-2px);
+            background: var(--hover-bg);
+            transform: translateY(-5px);
         }
 
         #toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 40px;
             background: var(--accent);
-            color: #000;
-            font-weight: bold;
-            padding: 10px 20px;
-            border-radius: 5px;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
             display: none;
+            font-weight: bold;
             z-index: 1000;
         }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>EMOJI DB</h1>
-    <p>Click <b>each</b> item to copy</p>
+<header>
+    <h1>EMOJI HUB</h1>
+    <p style="color: var(--text-muted)">Mega-Copy-Paste Pack: Click <b>each</b> item to copy [cite: 1]</p>
+</header>
+
+<div class="search-container">
+    <input type="text" id="search-bar" placeholder="Search lines, battle layouts, emojis...">
 </div>
 
-<input type="text" id="search" placeholder="Suche nach Emojis oder Symbolen...">
+<div class="container" id="content"></div>
 
-<div class="container" id="db-content"></div>
-
-<div id="toast">Copied!</div>
+<div id="toast">COPIED! 🚀</div>
 
 <script>
-    const db = {
-        "Linien, Rahmen & Trennzeichen": ['│', '┃', '┆', '┇', '┊', '┋', '┈', '┉', '┄', '┅', '─', '───', '───────', '━', '━━', '╭', '──┈➤', '╰┈➤', '╭╴', '╴╮', '╰', '╯', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼', '〢', '︱', '・', 'ㆍ', '‧', '˖', '·', '●', '■', '▪', '▫', '▬'],
-        "Sterne & Deko": ['✦', '✧', '✩', '✪', '✫', '✬', '✭', '✮', '✯', '✰', '✶', '✷', '✸', '✹', '★', '☆', '⋆', '✵', '✳', '✲', '✦✧', '✪✫', '✯✰', '∘₊✧──────✧₊∘', '‧₊˚✧[Text]✧˚₊‧', '✧・✦・✧', '⋆༺✦༻⋆'],
-        "Klammern & Text‑Deko": ['「', '」', '『', '』', '⌞', '⌝', '❮', '❯', '❰', '❱', '【', '】', '「 ✦ ✦ 」', '「 ✦ OWNER ✦ 」', '「 ✦ Moderator ✦ 」', '꧁ ⎝ ༺ ✧ ༻ ⎠ ꧂'],
-        "Herzen & Symbole": ['❤️', '💛', '💙', '💜', '🖤', '🤍', '🤎', '♡', '♥︎', '💗', '💓', '💖', '💝', '⚜️', '♕', '♛', '👑'],
-        "Layout Emojis": ['⭐', '⭐️', '✨', '⚔️', '⚡️', '⛔', '❗', '❓', '⁉️', '✔️', '❌', '➤', '➜', '➠', '➢', '❯', '▶', '▶️', '◀', '◀️', '◆', '◇', '⬆', '⬇', '⬅', '➡', '⚙️', '♟️', '🎵', '♪', '♫', '🛠️', '🛡️'],
-        "Tech & Mathe": ['∞', '≠', '≤', '≥', '±', '∑', '√', '∆', '♦', '⊹', '⊗', '⊕', '×', '÷', '≈', '∴', '∵', '†', '‡', '¶', '§', '©', '®', '™', '█', '▀', '▄', '▆', '▇', '▉', '▊'],
-        "Gesichter": ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '🥲', '☺️', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🥸', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '😳', '🥵', '🥶', '😶‍🌫️', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🫣', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🫠', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤯', '🥴', '😷', '🤒', '🤕', '🤑', '🤧', '😈', '👿'],
-        "Gesten": ['👋', '🤚', '🖐', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✍️', '💪', '🦾', '🦿', '🦵', '🦶'],
-        "Discord Layouts": ['✦ 𝐍𝐚𝐦𝐞 ✦', '┃・𝙲𝚑𝚊𝚝・┃', '╭─➤ 𝚃𝚘𝚙 𝙻𝚎𝚟𝚎𝚕', '╰─➤ 𝚂𝚞𝚋 𝙻𝚒𝚗𝚎', '‧₊˚✧ 𝙼𝚢 𝚁𝚘𝚕𝚎 ✧˚₊‧', '「 ✦ 𝐎𝐖𝐍𝐄𝐑 ✦ 」', '━━━⋆⋅☆⋅⋆━━━', '✧・✦・✧ 𝐌𝐎𝐃・✦・✧', '┃・⚔️・┃・⚡️・┃', '✔️✔️✔️']
+    const database = {
+        "Lines & Separators": [
+            '│', '┃', '┆', '┇', '┊', '┋', '┈', '┉', '┄', '┅', '─', '───', '───────', '━', '━━',
+            '╭', '──┈➤', '╰┈➤', '╭╴', '╴╮', '╰', '╯', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼',
+            '〢', '︱', '・', 'ㆍ', '‧', '˖', '·', '●', '■', '▪', '▫', '▬'
+        ], // [cite: 3]
+        "Stars & Decoration": [
+            '✦', '✧', '✩', '✪', '✫', '✬', '✭', '✮', '✯', '✰', '✶', '✷', '✸', '✹', '★', '☆', '✰',
+            '⋆', '✵', '✳', '✲', '✦✧', '✪✫', '✯✰', '∘₊✧──────✧₊∘', '‧₊˚✧‧₊˚✧', '✧・✦・✧', '⋆༺✦༻⋆'
+        ], // [cite: 5]
+        "Brackets & Quotes": [
+            '「', '」', '『', '』', '⌞', '⌝', '❮', '❯', '❰', '❱', '【', '】', '「 ✦ ✦ 」', 
+            '「 ✦ OWNER ✦ 」', '「 ✦ Moderator ✦ 」', '꧁ ⎝ ༺ ✧ ༻ ⎠ ꧂'
+        ], // [cite: 11]
+        "Hearts & Symbols": [
+            '❤️', '💛', '💙', '💜', '🖤', '🤍', '🤎', '♡', '♥', '💗', '💓', '💖', '💝', '⚜️', '♕', '♛', '👑'
+        ], // [cite: 14]
+        "Faces & Feelings": [
+            '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '🥲', '☺️', '😊', '😇', '🙂', '🙃', '😉', '😌', 
+            '😍', '🥰', '😘', '😗', '😙', '😋', '😛', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🥸', '🤩', '🥳',
+            '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤',
+            '😠', '😡', '🤬', '😳', '🥵', '🥶', '😶‍🌫️', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🫣', '🤫'
+        ], // [cite: 16]
+        "People & Gestures": [
+            '👋', '🤚', '🖐', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕',
+            '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '💪', '🦵'
+        ], // [cite: 21]
+        "Arrows & Directions": [
+            '→', '←', '↑', '↓', '↔', '↕', '↖', '↗', '↘', '↙', '➔', '➜', '➝', '➞', '➟', '➠', '➡', '⬅', '⬆', '⬇'
+        ], // [cite: 28, 29]
+        "Math & Technical": [
+            '∞', '≠', '≤', '≥', '±', '∑', '√', '∆', '♦', '⊹', '⊗', '⊕', '×', '÷', '≈', '∴', '∵', '†', '‡', '¶', '§', '©', '®', '™', '█', '▀', '▄', '▆'
+        ], // [cite: 46]
+        "Weapons & Combat": [
+            '▄︻デ╦═一━💥', '︻デ═一 💥', '▂▃▅▇█▓▒░ ✦ 💥', '━━━💣━━━🗡️', '🖐───────🖐', '╔═🖐═╗', '┏━╸😱╺━┓'
+        ], // 
+        "Defense & Protection": [
+            '━━━━━🛡️', '╭━━🛡️━━╮', '┃🖐🛡️🖐┃', '🔥💣🔥💥🔥', '💥✦💥✦💥🛡️'
+        ], // 
+        "Magic & Effects": [
+            '👎⚡👎⚡👎', '✦✧✦✧✦', '😑💫😑💫😑', '💥💥💥💥💥', '🔥🔥🔥🔥🔥'
+        ], // 
+        "Mini-Battle Layouts": [
+            '╔═╦╦╦╦═╗\n╠▄︻デ╦═一━💥╣\n╠╬╬╬╬╬╣\n╠💣🔥💥🔥💣╣\n╚═╩╩╩╩═╝',
+            '┏━╸😱╺━┓\n┃🖐💥🖐┃\n┃🔥💣🔥┃\n┗━━━━━┛',
+            '▂▃▅▇█▓▒░ ✦ 💥 ✦ ░▒▓█▇▅▃▂',
+            '╭─➤ 💥💫💥\n┃・⚡・┃・🔥・┃\n╰─➤ ✦✧✦'
+        ], // 
+        "Objects & Flags": [
+            '📱', '💻', '⌚', '🗝️', '🛠️', '🛡️', '⚙️', '🧪', '💡', '🕯️', '🏁', '🇺🇸', '🇩🇪', '🇬🇧', '🇮🇹', '🇯🇵'
+        ] // [cite: 30, 42]
     };
 
-    const contentDiv = document.getElementById('db-content');
+    const contentDiv = document.getElementById('content');
     const toast = document.getElementById('toast');
 
     function render(filter = "") {
         contentDiv.innerHTML = "";
-        for (const cat in db) {
-            const filteredItems = db[cat].filter(item => item.toLowerCase().includes(filter.toLowerCase()));
-            
-            if (filteredItems.length > 0) {
+        for (const cat in database) {
+            const filtered = database[cat].filter(i => i.toLowerCase().includes(filter.toLowerCase()));
+            if (filtered.length > 0) {
                 const section = document.createElement('div');
-                section.innerHTML = `<div class="category-name">${cat}</div>`;
+                section.innerHTML = `<div class="category-title">${cat}</div>`;
                 const grid = document.createElement('div');
                 grid.className = 'emoji-grid';
 
-                filteredItems.forEach(emoji => {
-                    const div = document.createElement('div');
-                    div.className = 'item';
-                    div.innerText = emoji;
-                    div.onclick = () => copy(emoji);
-                    grid.appendChild(div);
+                filtered.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerText = item;
+                    card.onclick = () => {
+                        navigator.clipboard.writeText(item);
+                        toast.style.display = 'block';
+                        setTimeout(() => toast.style.display = 'none', 1500);
+                    };
+                    grid.appendChild(card);
                 });
-
                 section.appendChild(grid);
                 contentDiv.appendChild(section);
             }
         }
     }
 
-    function copy(text) {
-        navigator.clipboard.writeText(text);
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 1500);
-    }
-
-    document.getElementById('search').addEventListener('input', (e) => render(e.target.value));
-
+    document.getElementById('search-bar').addEventListener('input', (e) => render(e.target.value));
     render();
 </script>
 
